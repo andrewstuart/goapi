@@ -28,10 +28,13 @@ func main() {
 
     de := json.NewDecoder(req.Body)
 
-    de.Decode(&j)
+    err1 := de.Decode(&j)
+    if(err1 != nil) {
+      return 400, "Bad JSON\n"
+    }
 
-    err := db.C(p["coll"]).Insert(j)
-    if(err != nil) {
+    err2 := db.C(p["coll"]).Insert(j)
+    if(err2 != nil) {
       return 500, "Server error"
     } else {
       return 200, "OKAY\n"
