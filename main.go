@@ -23,9 +23,19 @@ func main() {
 
   m.Map(db) //Let martini inject the db instance
 
-  m.Post("/:coll", func (d *mgo.Database, req *http.Request, p martini.Params) int {
-    db.C("routes").Insert(jsn{"route": p["coll"]})
-    return 200
+  m.Post("/:coll", func (d *mgo.Database, req *http.Request, p martini.Params) (int, string) {
+    var j jsn
+
+    de := json.NewDecoder(req.Body)
+
+    de.Decode(&j)
+
+    err := db.C(p["coll"]).Insert(j)
+    if(err != nil) {
+      return 500, "Server error"
+    } else {
+      return 200, "OKAY\n"
+    }
   })
 
   m.Get("/:coll", func (d *mgo.Database, r http.ResponseWriter, p martini.Params) {
