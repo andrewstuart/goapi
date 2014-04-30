@@ -1,9 +1,10 @@
+//Goapi is an api build on top of mgo and martini intended to be RESTful and work out of the box.
 package main
 
 import (
   "github.com/go-martini/martini"
   "labix.org/v2/mgo"
-  "fmt"
+  "log"
   "net/http"
   "encoding/json"
 )
@@ -13,9 +14,9 @@ type jsn map[string]interface{}
 func main() {
   m := martini.Classic()
 
-  sess, err := mgo.Dial("mongodb://172.17.0.2")
+  sess, err := mgo.Dial("mongodb://172.18.0.3")
   if(err != nil) {
-    fmt.Println(err)
+    log.Fatal(err)
   }
 
   db := sess.DB("test")
